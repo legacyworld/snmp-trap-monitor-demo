@@ -1,0 +1,29 @@
+input {
+  snmptrap {
+    type => "snmptrap"
+    port => 1062
+    community => ["public"]
+    # ボリュームマウントされた場所を指定
+    yamlmibdir => "/usr/share/logstash/vendor/mibs"
+  }
+}
+
+filter {
+  if [type] == "snmptrap" {
+    mutate {
+      add_field => { "environment" => "docker-test" }
+    }
+  }
+}
+
+output {
+    elasticsearch {
+        cloud_id => "<cloud id>"
+        api_key => "<api key>"
+        data_stream => "true"
+        data_stream_type => "logs"
+        data_stream_dataset => "snmp_test"
+        data_stream_namespace => "default"
+    }
+  stdout { codec => rubydebug }
+}
