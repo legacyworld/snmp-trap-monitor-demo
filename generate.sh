@@ -37,6 +37,8 @@ services:
     volumes:
       - ./logstash/pipeline:/usr/share/logstash/pipeline
       - mib-data:/usr/share/logstash/vendor/mibs
+    command: >
+      logstash -f /usr/share/logstash/pipeline/logstash.conf
     networks:
       snmp-net:
         # Logstashにも固定IPを振っておくと分かりやすい（必須ではない）
